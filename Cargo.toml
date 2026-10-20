@@ -1,0 +1,32 @@
+[package]
+include = ["src/**", "schemas/**", "tests/**", "README.md", "LICENSE", "NOTICE", "SECURITY.md", "Cargo.lock"]
+name = "official-hats"
+version = "0.11.0"
+edition = "2024"
+rust-version = "1.97"
+license = "Apache-2.0"
+description = "Explicit-source signed HAT catalog verification"
+publish = false
+readme = "README.md"
+repository = "https://github.com/hathq/official-hats"
+homepage = "https://github.com/hathq/official-hats"
+
+[package.metadata.hathq]
+boundary = "explicit-source-verification"
+external_actions = false
+credentials = false
+
+[dependencies]
+serde = { version = "1.0.228", features = ["derive"] }
+serde_json = "1.0.150"
+ed25519-dalek = "3.0.0"
+hex = "0.4.3"
+sha2 = "0.11.0"
+hat-specifications = { version = "=0.10.0" }
+
+[lints.rust]
+unsafe_code = "forbid"
+
+[lints.clippy]
+all = "warn"
+pedantic = "warn"

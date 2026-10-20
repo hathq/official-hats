@@ -1,0 +1,149 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "hathq://official-hats/federation-directory/v1",
+  "title": "Signed bounded official HAT federation directory",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "directory_id",
+    "signing_key_id",
+    "origin",
+    "catalog_digest_sha256",
+    "revision",
+    "issued_at_epoch_s",
+    "expires_at_epoch_s",
+    "maximum_child_depth",
+    "children",
+    "location_sets"
+  ],
+  "properties": {
+    "schema": {
+      "const": "hathq://official-hats/federation-directory/v1"
+    },
+    "directory_id": {
+      "$ref": "#/$defs/token"
+    },
+    "signing_key_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "origin": {
+      "type": "string",
+      "format": "uri",
+      "minLength": 1
+    },
+    "catalog_digest_sha256": {
+      "$ref": "#/$defs/digest"
+    },
+    "revision": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "issued_at_epoch_s": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "expires_at_epoch_s": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "maximum_child_depth": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 3
+    },
+    "children": {
+      "type": "array",
+      "maxItems": 32,
+      "items": {
+        "$ref": "#/$defs/child"
+      }
+    },
+    "location_sets": {
+      "type": "array",
+      "maxItems": 256,
+      "items": {
+        "$ref": "#/$defs/locationSet"
+      }
+    }
+  },
+  "$defs": {
+    "token": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+      "maxLength": 96
+    },
+    "digest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "child": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "directory_id",
+        "document_path",
+        "public_key_hex",
+        "valid_from_epoch_s",
+        "valid_until_epoch_s"
+      ],
+      "properties": {
+        "directory_id": {
+          "$ref": "#/$defs/token"
+        },
+        "document_path": {
+          "type": "string",
+          "pattern": "^/federation/v1/directories/[a-z0-9.-]+\\.json$",
+          "maxLength": 256
+        },
+        "public_key_hex": {
+          "$ref": "#/$defs/digest"
+        },
+        "valid_from_epoch_s": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "valid_until_epoch_s": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "locationSet": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "package_id",
+        "package_digest_sha256",
+        "document_path",
+        "document_digest_sha256",
+        "location_count"
+      ],
+      "properties": {
+        "package_id": {
+          "type": "string",
+          "pattern": "^hat/[a-z0-9]+(?:-[a-z0-9]+)*$",
+          "maxLength": 100
+        },
+        "package_digest_sha256": {
+          "$ref": "#/$defs/digest"
+        },
+        "document_path": {
+          "type": "string",
+          "pattern": "^/federation/v1/locations/[a-z0-9.-]+\\.json$",
+          "maxLength": 256
+        },
+        "document_digest_sha256": {
+          "$ref": "#/$defs/digest"
+        },
+        "location_count": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 64
+        }
+      }
+    }
+  }
+}
